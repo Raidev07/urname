@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fef0f7;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .page {
+            text-align: center;
+            margin-bottom: 50px;
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #444;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #e889aa;
+            font-size: 48px;
+            font-weight: bold;
+            margin: 0;
+            display: inline;
+        }
+
+        .emoji {
+            font-size: 48px;
+            margin-left: 10px;
+            color: #444;
+        }
+
+        .instruction {
+            color: #6d7e96;
+            font-size: 18px;
+            margin: 30px 0;
+            font-weight: 500;
+        }
+
+        .next-btn {
+            background: #e889aa;
+            color: white;
+            border: none;
+            padding: 15px 60px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 137, 170, 0.3);
+        }
+
+        .next-btn:hover {
+            background: #d577a0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 137, 170, 0.4);
+        }
+
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Page 2 styles */
+        .envelope-img, .crying-img, .header-img {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        
+        .crying-img {
+            margin-top: 20px;
+        }
+        
+        .header-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 5px solid white;
+            transform: rotate(-3deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .header-img:hover {
+            transform: rotate(3deg);
+        }
+
+        .question-text {
+            font-size: 24px;
+            color: #444;
+            margin: 20px 0 40px 0;
+            font-weight: 500;
+        }
+        
+        .plea-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #444;
+            margin: 5px 0;
+            line-height: 1.2;
+        }
+        
+        .plea-subtitle {
+            font-size: 32px;
+            font-weight: bold;
+            color: #444;
+            margin: 5px 0 40px 0;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .choice-btn {
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .open-btn {
+            background: #e889aa;
+            color: white;
+            box-shadow: 0 4px 15px rgba(232, 137, 170, 0.3);
+        }
+
+        .open-btn:hover {
+            background: #d577a0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 137, 170, 0.4);
+        }
+
+        .no-btn {
+            background: #7dd3c0;
+            color: white;
+            box-shadow: 0 4px 15px rgba(125, 211, 192, 0.3);
+        }
+
+        .no-btn:hover {
+            background: #6bc4b0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(125, 211, 192, 0.4);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-container {
+            background: #fff;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .letter-header {
+            background: #ffd6e4;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ffc0d5;
+        }
+
+        .letter-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #7a4b73;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7a4b73;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #ffbcd5;
+        }
+
+        .letter-content {
+            padding: 30px;
+            background-color: #ffebf2;
+            background-image: url('rjonvzwh90.png');
+            background-size: 100% 100%;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .letter-greeting {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7a4b73;
+            margin-bottom: 30px;
+            margin-top: 60px;
+            font-style: italic;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .letter-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #7a4b73;
+            margin-bottom: 20px;
+            text-align: left;
+            font-style: italic;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+            padding: 0 20px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-style: italic;
+            color: #7a4b73;
+            margin-top: 40px;
+            padding-right: 20px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+        }
+        
+        [contenteditable="true"]:focus {
+            outline: 2px dashed rgba(255, 150, 180, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .letter-actions {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 32px;
+            }
+            
+            .emoji {
+                font-size: 32px;
+            }
+            
+            .header-img {
+                width: 150px;
+                height: 150px;
+                border-radius: 12px;
+            }
+            
+            .instruction {
+                font-size: 16px;
+                margin: 20px 0;
+            }
+            
+            .next-btn {
+                padding: 12px 40px;
+                font-size: 16px;
+            }
+            
+            .envelope-img, .crying-img {
+                max-width: 250px;
+            }
+            
+            .question-text {
+                font-size: 20px;
+                margin: 15px 0 30px 0;
+            }
+            
+            .plea-title {
+                font-size: 28px;
+            }
+            
+            .plea-subtitle {
+                font-size: 24px;
+            }
+            
+            .choice-btn {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                max-height: 85vh;
+            }
+            
+            .letter-content {
+                padding: 20px;
+            }
+            
+            .letter-greeting {
+                font-size: 20px;
+                margin-top: 40px;
+            }
+            
+            .letter-text {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+            
+            .letter-signature {
+                padding-right: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 28px;
+            }
+            
+            .emoji {
+                font-size: 28px;
+            }
+            
+            .header-img {
+                width: 120px;
+                height: 120px;
+                border-radius: 10px;
+            }
+            
+            .instruction {
+                font-size: 14px;
+            }
+            
+            .plea-title {
+                font-size: 24px;
+            }
+            
+            .plea-subtitle {
+                font-size: 20px;
+            }
+            
+            .envelope-img, .crying-img {
+                max-width: 200px;
+            }
+            
+            .letter-container {
+                width: 98%;
+            }
+            
+            .letter-content {
+                padding: 15px;
+            }
+            
+            .letter-greeting {
+                font-size: 18px;
+            }
+            
+            .letter-text {
+                font-size: 13px;
+            }
+        }
+        
+        /* Music control styles */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(232, 137, 170, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 137, 170, 0.3);
+        }
+        
+        .music-control:hover {
+            background: rgba(213, 119, 160, 0.9);
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .music-control {
+                width: 45px;
+                height: 45px;
+                font-size: 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="" type="audio/mpeg">
+    </audio>
+    
+    <!-- Click Sound Effect -->
+    <audio id="clickSound">
+        <source src="2568.wav" type="audio/wav">
+    </audio>
+    
+    <!-- Music Control Button with label -->
+    <div id="musicControlWrapper" style="position: fixed; bottom: 20px; right: 20px; display: none; flex-direction: column; align-items: center; z-index: 1001;">
+        <button class="music-control" id="musicToggle" onclick="toggleMusic()">🎵</button>
+        <label for="musicToggle" style="color: white; font-size: 12px; margin-top: 4px; cursor: pointer;">Click here</label>
+    </div>
+
+    <style>
+        /* Adjust music control position when card QR code is visible */
+        #cardQRCodeContainer:target ~ #musicControlWrapper {
+            bottom: 100px; /* move up to be near QR code */
+        }
+    </style>
+    
+    <!-- PAGE 1: Birthday Greeting -->
+    <div class="page active" id="page1">
+        <img src="d4enwza2ob.png" alt="Birthday character" class="header-img">
+        <h1 class="title">Happy Birthday</h1>
+        <h1 class="subtitle">my baby!</h1>
+        <span class="emoji">(｡◕‿◕｡)</span>
+        
+        <p class="instruction">Click the next button!! (つ◕v◕)つ♡</p>
+        
+        <button class="next-btn" onclick="showPage2()">Next!! ♪～♪</button>
+    </div>
+
+    <!-- PAGE 2: Envelope Question -->
+    <div class="page" id="page2">
+        <img src="lhwhk0jmgr.png" alt="Pink envelope" class="envelope-img">
+        
+        <p class="question-text">Do you want to open it? "ヾ(＂•̀_•́＂)ノ＂</p>
+        
+        <div class="button-container">
+            <button class="choice-btn open-btn" onclick="openEnvelope()">Open it</button>
+            <button class="choice-btn no-btn" onclick="sayNo()">No ty</button>
+        </div>
+    </div>
+
+    <!-- MODAL: Letter Display -->
+    <div class="modal" id="letterModal">
+        <div class="letter-container">
+            <div class="letter-header">
+                <h3 class="letter-title">Ooo.. A message (ﾉ◕o◕)ﾉ♡ !!</h3>
+                <button class="close-btn" onclick="closeLetter()">×</button>
+            </div>
+            <div class="letter-content">
+                <div class="letter-greeting">Happy Birthday, MI BABYY (^ᴗ^)</div>
+                
+                <div class="letter-text">
+                    Today is all about celebrating you the incredible person who brings so much joy, love, and light into my life. I feel so lucky to call you mine. You've shown me what true love feels like, and every day with you is a beautiful adventure.
+                </div>
+                
+                <div class="letter-text">
+                    I love everything about you your smile, your laugh, your strength, your kindness. You make me feel safe, supported, and deeply loved. I'm so proud of the person you are and everything you're becoming.
+                </div>
+                
+                <div class="letter-text">
+                    On your special day, I just want to say thank you. Thank you for being you. Thank you for letting me love you. And thank you for loving me right back.
+                </div>
+                
+                <div class="letter-text">
+                    Here's to another amazing year together more memories, more laughs, and more love. I can't wait to keep growing with you.
+                </div>
+                
+                <div class="letter-text">
+                    Happy Birthday, my heart. I love you endlessly. ❤️
+                </div>
+                
+                <div class="letter-signature">
+                    Your forever<br>
+                    ♡
+
+                    close mo meron pa next page
+                </div>
+            </div>
+    </div>
+    </div>
+
+    <!-- PAGE 3: Please Try Again -->
+    <div class="page" id="page3">
+        <img src="mhdk5h7anz.png" alt="Crying character" class="crying-img">
+        
+        <h2 class="plea-title">Awh.. Let's try again?</h2>
+        <h2 class="plea-subtitle">PLEASEE?</h2>
+        
+        <div class="button-container">
+            <button class="choice-btn open-btn" onclick="tryAgain()">Again..?</button>
+        </div>
+    </div>
+
+    <!-- New Button to go to another picture -->
+    <div id="nextPictureContainer" style="display:none; text-align:center; margin-top:20px;">
+        <button id="nextPictureBtn" class="choice-btn open-btn">Next Picture</button>
+    </div>
+
+    <!-- New container for card-qrcode.png -->
+    <div id="cardQRCodeContainer" style="display:none; text-align:center; margin-top:20px;">
+        <img src="card-qrcode.png" alt="Card QR Code" style="max-width: 300px; height: auto; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        <audio controls autoplay style="margin-top: 10px;">
+            <source src="Audio Recording - Jul 1, 2025-VEED.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        // Preload images on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const imagesToPreload = [
+                '9yy3sxblhj.png',
+                'lhwhk0jmgr.png',
+                'rjonvzwh90.png', 
+                'mhdk5h7anz.png',
+                'd4enwza2ob.png',
+                'card-qrcode.png'
+            ];
+            
+            // Preload audio files
+            const audioToPreload = [
+                'xoa0x82ghj.mp3',
+                '2568.wav'
+            ];
+            
+            imagesToPreload.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        });
+        
+        // Navigation Functions
+        function showPage2() {
+            document.getElementById('page1').classList.remove('active');
+            document.getElementById('page2').classList.add('active');
+        }
+
+        function openEnvelope() {
+            document.getElementById('letterModal').classList.add('active');
+            // Hide the next picture button when modal opens
+            document.getElementById('nextPictureContainer').style.display = 'none';
+            // Hide the card QR code container if visible
+            document.getElementById('cardQRCodeContainer').style.display = 'none';
+        }
+
+        function closeLetter() {
+            document.getElementById('letterModal').classList.remove('active');
+            // Show the next picture button when modal closes
+            document.getElementById('nextPictureContainer').style.display = 'block';
+        }
+
+        function sayNo() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page3').classList.add('active');
+        }
+        
+        function tryAgain() {
+            document.getElementById('page3').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+        }
+
+        // New function to handle next picture button click
+        document.getElementById('nextPictureBtn').addEventListener('click', function() {
+            // Hide page2 and next picture button
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('nextPictureContainer').style.display = 'none';
+            // Show the card QR code container
+            document.getElementById('cardQRCodeContainer').style.display = 'block';
+        });
+        
+        // Music Control System
+        let isMusicPlaying = false;
+        
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicToggle');
+            
+            playClickSound();
+            
+            if (isMusicPlaying) {
+                music.pause();
+                musicBtn.innerHTML = '🎵';
+                isMusicPlaying = false;
+            } else {
+                music.play().catch(e => {
+                    console.log('Music autoplay blocked by browser');
+                });
+                musicBtn.innerHTML = '🔇';
+                isMusicPlaying = true;
+            }
+        }
+        
+        // Click Sound Effect
+        function playClickSound() {
+            const clickSound = document.getElementById('clickSound');
+            clickSound.currentTime = 0;
+            clickSound.play().catch(e => {
+                console.log('Click sound failed to play');
+            });
+        }
+        
+        // Auto-play music on first user interaction
+        document.addEventListener('click', function() {
+            if (!isMusicPlaying) {
+                const music = document.getElementById('bgMusic');
+                music.play().catch(e => {
+                    // Ignore error
+                });
+                document.getElementById('musicToggle').innerHTML = '🔇';
+                isMusicPlaying = true;
+            }
+        }, { once: true });
+        
+        // Add click sounds to all buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('button, .choice-btn, .next-btn, .save-btn, .music-control');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    playClickSound();
+                });
+            });
+            
+            const editableElements = document.querySelectorAll('[contenteditable="true"]');
+            editableElements.forEach(element => {
+                element.addEventListener('click', function() {
+                    playClickSound();
+                });
+                
+                element.addEventListener('input', function() {
+                    saveLetterContent(false);
+                });
+                
+                element.addEventListener('blur', function() {
+                    saveLetterContent(false);
+                });
+            });
+        });
+        
+        // LocalStorage Functions (Legacy)
+        function saveLetterContent(showAlert = true) {
+            if (showAlert) {
+                alert('Content saved! 💌');
+            }
+            
+            const letterGreeting = document.querySelector('.letter-greeting').innerText;
+            const letterTexts = [...document.querySelectorAll('.letter-text')].map(el => el.innerText);
+            const letterSignature = document.querySelector('.letter-signature').innerHTML;
+            
+            localStorage.setItem('letterContent', JSON.stringify({
+                greeting: letterGreeting,
+                texts: letterTexts,
+                signature: letterSignature
+            }));
+        }
+        
+        function loadSavedContent() {
+            const savedContent = localStorage.getItem('letterContent');
+            
+            if (savedContent) {
+                try {
+                    const content = JSON.parse(savedContent);
+                    
+                    document.querySelector('.letter-greeting').innerText = content.greeting;
+                    
+                    const textElements = document.querySelectorAll('.letter-text');
+                    content.texts.forEach((text, index) => {
+                        if (textElements[index]) {
+                            textElements[index].innerText = text;
+                        }
+                    });
+                    
+                    document.querySelector('.letter-signature').innerHTML = content.signature;
+                } catch (e) {
+                    console.error('Failed to load saved content', e);
+                }
+            }
+        }
+
+        // Load saved content on page load
+        window.addEventListener('DOMContentLoaded', loadSavedContent);
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('letterModal');
+            if (event.target === modal) {
+                closeLetter();
+            }
+        }
+    </script>
+</body>
+</html>

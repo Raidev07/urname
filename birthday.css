@@ -1,0 +1,410 @@
+body {
+            margin: 0;
+            padding: 0;
+            background-color: #fef0f7;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .page {
+            text-align: center;
+            margin-bottom: 50px;
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #444;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #e889aa;
+            font-size: 48px;
+            font-weight: bold;
+            margin: 0;
+            display: inline;
+        }
+
+        .emoji {
+            font-size: 48px;
+            margin-left: 10px;
+            color: #444;
+        }
+
+        .instruction {
+            color: #6d7e96;
+            font-size: 18px;
+            margin: 30px 0;
+            font-weight: 500;
+        }
+
+        .next-btn {
+            background: #e889aa;
+            color: white;
+            border: none;
+            padding: 15px 60px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(232, 137, 170, 0.3);
+        }
+
+        .next-btn:hover {
+            background: #d577a0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 137, 170, 0.4);
+        }
+
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Page 2 styles */
+        .envelope-img, .crying-img, .header-img {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+        
+        .crying-img {
+            margin-top: 20px;
+        }
+        
+        .header-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 5px solid white;
+            transform: rotate(-3deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .header-img:hover {
+            transform: rotate(3deg);
+        }
+
+        .question-text {
+            font-size: 24px;
+            color: #444;
+            margin: 20px 0 40px 0;
+            font-weight: 500;
+        }
+        
+        .plea-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #444;
+            margin: 5px 0;
+            line-height: 1.2;
+        }
+        
+        .plea-subtitle {
+            font-size: 32px;
+            font-weight: bold;
+            color: #444;
+            margin: 5px 0 40px 0;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .choice-btn {
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .open-btn {
+            background: #e889aa;
+            color: white;
+            box-shadow: 0 4px 15px rgba(232, 137, 170, 0.3);
+        }
+
+        .open-btn:hover {
+            background: #d577a0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 137, 170, 0.4);
+        }
+
+        .no-btn {
+            background: #7dd3c0;
+            color: white;
+            box-shadow: 0 4px 15px rgba(125, 211, 192, 0.3);
+        }
+
+        .no-btn:hover {
+            background: #6bc4b0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(125, 211, 192, 0.4);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-container {
+            background: #fff;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: slideIn 0.3s ease;
+        }
+
+        .letter-header {
+            background: #ffd6e4;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ffc0d5;
+        }
+
+        .letter-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #7a4b73;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7a4b73;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #ffbcd5;
+        }
+
+        .letter-content {
+            padding: 30px;
+            background-color: #ffebf2;
+            background-image: url('rjonvzwh90.png');
+            background-size: 100% 100%;
+            min-height: 500px;
+            position: relative;
+        }
+
+        .letter-greeting {
+            font-size: 24px;
+            font-weight: bold;
+            color: #7a4b73;
+            margin-bottom: 30px;
+            margin-top: 60px;
+            font-style: italic;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+        }
+
+        .letter-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #7a4b73;
+            margin-bottom: 20px;
+            text-align: left;
+            font-style: italic;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+            padding: 0 20px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-style: italic;
+            color: #7a4b73;
+            margin-top: 40px;
+            padding-right: 20px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 3px rgba(255, 255, 255, 0.7);
+        }
+        
+        [contenteditable="true"]:focus {
+            outline: 2px dashed rgba(255, 150, 180, 0.5);
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .letter-actions {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 32px;
+            }
+            
+            .subtitle {
+                font-size: 32px;
+            }
+            
+            .emoji {
+                font-size: 32px;
+            }
+            
+            .header-img {
+                width: 150px;
+                height: 150px;
+                border-radius: 12px;
+            }
+            
+            .instruction {
+                font-size: 16px;
+                margin: 20px 0;
+            }
+            
+            .next-btn {
+                padding: 12px 40px;
+                font-size: 16px;
+            }
+            
+            .envelope-img, .crying-img {
+                max-width: 250px;
+            }
+            
+            .question-text {
+                font-size: 20px;
+                margin: 15px 0 30px 0;
+            }
+            
+            .plea-title {
+                font-size: 28px;
+            }
+            
+            .plea-subtitle {
+                font-size: 24px;
+            }
+            
+            .choice-btn {
+                padding: 12px 30px;
+                font-size: 16px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .letter-container {
+                width: 95%;
+                max-height: 85vh;
+            }
+            
+            .letter-content {
+                padding: 20px;
+            }
+            
+            .letter-greeting {
+                font-size: 20px;
+                margin-top: 40px;
+            }
+            
+            .letter-text {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+            
+            .letter-signature {
+                padding-right: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 28px;
+            }
+            
+            .emoji {
+                font-size: 28px;
+            }
+            
+            .header-img {
+                width: 120px;
+                height: 120px;
+                border-radius: 10px;
+            }
+            
+            .instruction {
+                font-size: 14px;
+            }
+            
+            .plea-title {
+                font-size: 24px;
+            }
+            
+            .plea-subtitle {
+                font-size: 20px;
